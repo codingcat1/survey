@@ -36,6 +36,35 @@ def menu
 end
 
 def add_survey
+  puts "*** ADD A SURVEY ***\n"
+  puts "Please type the name of the Survey you would like to add:"
+  survey_name = gets.chomp
+  survey = Survey.new(:name => survey_name)
+  if survey.save
+    puts "'#{survey_name}' has been added to the list of Surveys. "
+  else
+    puts "Not a valid Survey name, please try again:\n"
+    survey.errors.full_messages.each{ |message| puts message }
+  end
 end
+
+def add_question
+  puts "*** ADD A QUESTION ***\n"
+  puts "Please choose a Survey to add a question to:"
+  Survey.all.each do | survey |
+    puts "#{survey.name}\n"
+  end
+  survey_input = gets.chomp
+  add_to_survey = Survey.find_by(:name => survey_input)
+  puts "Please type a question that you would like to add to #{survey_input}:"
+  question_input = gets.chomp
+  question = Question.new(:question => question_input)
+  question.update(:survey_id => add_to_survey.id)
+  question.save
+  puts "Your question has been added!"
+end
+
+
+
 
 welcome
